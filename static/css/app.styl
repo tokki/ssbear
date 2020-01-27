@@ -1,0 +1,229 @@
+@import "base/normalize.css"
+@import "nib"
+
+body
+  color #495060
+  min-width 320px
+  font-family -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji
+  font-size 14px
+  line-height 130%
+
+a
+  color #1f8dd6
+  text-decoration none
+
+.btn
+  background #e0e1e2
+  border-radius 3px
+  padding 6px 16px
+  font-size 14px
+  color rgba(0,0,0,.6)
+  cursor pointer
+  text-shadow none
+  box-shadow none
+  border none
+  box-sizing border-box
+  display inline-block
+  text-transform uppercase
+  font-weight bold
+  &:hover
+    background #cacbcd
+    color rgba(0,0,0,.8)
+  &.small
+    font-size 12px
+    padding 4px 12px
+  &.large
+    font-size 16px
+    padding 10px 20px
+  &.success
+    background #21ba45
+    color #fff
+    &:hover
+      background #16ab39
+  &.primary
+    background #2185d0
+    color #fff
+    &:hover
+      background #1678c2
+  &.failure
+    background #db2828
+    color #fff
+    &:hover
+      background #d01919
+.price
+  color red
+.wrap
+	width 100%
+.header
+	border-bottom 1px solid #f1f1f1
+	box-shadow 1px 2px 4px 0 rgba(0,0,0,.03)
+	.container
+		width 950px
+		margin 0 auto
+		clearfix()
+		padding 20px
+		font-size 13px
+		font-weight bold
+	.logo
+		float left
+		color #333
+	.nav
+		float right
+		a
+			color #333
+			margin 0px 5px
+			transition color 0.5s ease
+			&:hover
+				color #999
+
+.main
+	padding 30px 0px
+	.container
+		width 950px
+		margin 0 auto
+		clearfix()
+  .heading
+    text-align center
+    border-bottom 1px solid #eee
+    padding-bottom 30px
+    margin-bottom 30px
+  .section
+    padding-bottom 30px
+    margin-bottom 30px
+    border-bottom 1px solid #eee
+    .more-right
+      float right
+
+.footer
+	border-top 1px solid #f1f1f1
+	box-shadow -1px -2px 4px 0 rgba(0,0,0,.03)
+	.container
+		width 950px
+		margin 30px auto
+		a
+			color #666
+.messages
+  margin 0px auto
+  padding 0px
+  padding-bottom 30px
+  max-width 920px
+  list-style none
+  li
+    margin 0
+    padding 20px
+  li.success
+    color #2c662d
+    background-color #fcfff5
+    box-shadow 0 0 0 1px #a3c293 inset, 0 0 0 0 transparent
+  li.warning
+    color #573a08
+    background-color #fffaf3
+    box-shadow 0 0 0 1px #c9ba9b inset, 0 0 0 0 transparent
+
+
+.form
+  &.normal
+    width 400px
+  .form-group 
+    clearfix()
+    padding 10px 0px
+    label
+      display block
+      padding-bottom 5px
+      &:after
+        content ":"
+    input
+      padding 10px
+      width 100%
+      box-sizing border-box
+      background #eeeeee
+      color #495060
+      border 0px
+      font-family inherit
+      &:focus
+        border 0px 
+        background #e9eaec
+        outline none
+    ul.checkbox
+      list-style none
+      li
+        padding 10px 0px
+        label
+          display inline-block
+          &:after
+            content ""
+        input
+          width auto
+    ul.errorlist
+      list-style none
+      margin 0
+      display block
+      clear both
+      padding 5px 0px 0px 0px
+      font-size 14px
+      color #ed3f14
+ 
+.align-right
+  text-align right
+.cards
+  clearfix()
+  .card
+    width 50%
+    box-sizing border-box
+    float left
+    border 10px solid #fff
+    border-radius 3px
+    background #f2f2f2
+    padding 20px
+
+  
+
+.table
+  width 100%
+  margin 20px 0px
+  border 1px solid rgba(34,36,38,.15)
+  border-collapse separate
+  border-spacing 0
+  text-align left
+  background #fff
+  thead
+    th
+      background #f9fafb
+      font-weight blod
+      border-bottom 1px solid rgba(34,36,38,.1)
+      padding 12px
+      border-left 1px solid rgba(34,36,38,.1)
+    th:first-child
+      border-left none
+  tbody
+    td
+      padding 12px
+      border-left 1px solid rgba(34,36,38,.1)
+      border-top 1px solid rgba(34,36,38,.1)
+    td:first-child
+      border-left none
+
+.announcement
+  padding 10px 20px
+  color #333
+  background-color #EDEFF4
+
+.traffic_info
+	.traffic_total
+		width 400px
+		overflow hidden
+		background #21ba45
+		height 30px
+		
+  .traffic_used
+    height 30px
+    float left
+    background #9f3a38
+
+.qrwrap
+	position relative
+	.qrcode
+		position absolute
+		left -100px
+		top -150px
+		display none

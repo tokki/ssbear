@@ -1,0 +1,114 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "Dashboard" %}{% endblock %}
+
+{% block content %}
+  <div class="section">
+    <div class="announcement">
+      {% if request.LANGUAGE_CODE == "zh-hans"%}
+      <h3>{{ann.title_cn}}</h3>
+      <p>{{ann.content_cn}}</p>
+      {% else %}
+      <h3>{{ann.title}}</h3>
+      <p>{{ann.content}}</p>
+      {% endif %}
+      <p><a href="/dashboard/announcement/">{% trans "More" %}</a></p>
+    </div>
+  </div>
+
+  <div class="section">
+
+    <div class="more-right">
+      <a  class="btn small primary" href="/dashboard/buy/">{% trans "Buy service"%}</a>
+    </div>
+    <h4>{% trans "My service" %}</h4>
+    <table class="table">
+      <thead>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "Remark" %}</th>
+        <th>{% trans "Duration" %}</th>
+        <th>{% trans "Plan" %}</th>
+        <th>{% trans "Action" %}</th>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td >
+            {% if order.status == 0 %}
+              <span style="color:red">{% trans 'Disable' %}<span>
+            {% else %}
+              <span style="color:green">{% trans 'Enable' %}<span>
+            {% endif %}
+          </td>
+          <td>{{order.remark}}</td>
+          <td>{{order.create_at|date:'Y.m.d'}}~{{order.expired_at|date:'Y.m.d'}}</td>
+          <td>{{order.service.title}}</td>
+          <td><a href="/dashboard/order/{{order.id}}/" class="btn small">{% trans "Manage" %}</a></td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+    <div class="more"><a  class="btn small" href="/dashboard/my_service/">{% trans "All service"%}</a></div>
+  </div>
+  
+  <div class="section">
+    <div class="more-right">
+      <a  class="btn small primary" href="/dashboard/add_invite/" >{% trans "Create new invite code"%}</a>
+    </div>
+    <h3>{% trans "Invite code" %}</h3>
+    <table class="table">
+      <thead>
+        <th>{% trans "text" %}</th>
+        <th>{% trans "times left" %}</th>
+        <th>{% trans "expired" %}</th>
+      </thead>
+      <tbody>
+        {% for inv in invs %}
+        <tr>
+          <td>{{inv.text}}</td>
+          <td>{{inv.times}}</td>
+          <td>{{inv.expired|date:"Y-m-d"}}</td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+ 
+  </div>
+
+  <div class="section">
+    <h3>{% trans "Invite History" %}</h3>
+    <table class="table">
+      <thead>
+        <th>{% trans "Create date" %}</th>
+        <th>{% trans "Email" %}</th>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{user.date_joined|date:'Y.m.d'}}</td>
+          <td>{{user.email}}</td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+    <div class="more">
+      <a class="btn small" href="/dashboard/invite_history/">{% trans "All invite history" %}</a>
+    </div>
+  </div>
+
+
+
+  <div class="section">
+    <h3>{% trans "Download" %}</h3>
+    <p>Windows:<a href="https://github.com/2dust/v2rayN">v2rayN</a></p>
+    <p>Mac:<a href="https://github.com/yanue/V2rayU">v2rayU</a></p>
+    <p>iOS:<a href="https://apps.apple.com/us/app/shadowrocket/id932747118">App Store</a></p>
+    <p>Android:<a href="https://apkpure.com/bifrostv/com.github.dawndiy.bifrostv">BifrostV</a></p>
+    <div class="more">
+      <a class="btn small" href="/dashboard/download/">{% trans "Learn More" %}</a>
+    </div>
+  </div>
+
+{% endblock %}
+

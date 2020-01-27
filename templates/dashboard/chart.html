@@ -1,0 +1,39 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "Manage service" %}{% endblock %}
+{% block foot %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script>
+  var resp = '{{resp|safe}}'
+  var data = JSON.parse(resp)
+  var ctx = document.getElementById('traffic_chart');
+  var v = Object.values(data);
+  for(var prop in v) {
+    v[prop] = v[prop]/(1024*1024) 
+  }
+  var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+          labels: Object.keys(data),
+          datasets: [{
+              label: 'data per day',
+              data: v,
+              borderWidth: 1
+          }]
+      }
+  });
+
+</script>
+{% endblock %}
+
+{% block content %}
+  <div class="heading">
+    <h2>Order ID : <span style="color:red">{{order.id}}</span></h2>
+  </div>
+  <div class="section">
+    <canvas id="traffic_chart" width="900" height="400"></canvas>
+  </div>
+{% endblock %}
+

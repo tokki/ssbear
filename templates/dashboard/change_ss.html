@@ -1,0 +1,29 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "Change connect password" %} {% endblock %}
+
+{% block content %}
+<div class="heading">
+  <h2> {% trans "Change connect password " %} </h2>
+</div>
+<div class="section">
+  <h4>{% trans "Old password:"%}{{order.password}}</h4>
+  <form class="form normal" action="/dashboard/change_ss_password/{{order.id}}/" method="post">
+      {% csrf_token %}
+      {% for field in form%}
+        <div class="form-group">
+          <label for="{{field.name}}">{{field.label}}</label>
+          {{field}}
+          {{field.errors}}
+        </div>
+      {% endfor %}
+      <div class="form-group">
+        <button type="submit" class="btn primary"> {% trans "Submit" %}  </button>
+      </div>
+  </form>
+</div>
+
+
+{% endblock %}
+

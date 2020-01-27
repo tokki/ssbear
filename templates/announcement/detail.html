@@ -1,0 +1,26 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "Announcement" %} {% endblock %}
+
+{% block content %}
+<div class="heading">
+  <h2> {% trans "Announcement" %} </h2>
+</div>
+<div class="section">
+  {% for an in announcement %}
+    {% if request.LANGUAGE_CODE == "zh-hans"%}
+    <p><i>{{an.create_at|date:'Y-m-d'}}</i></p>
+    <h3>{{an.title_cn}}</h3>
+    <div>{{an.content_cn}}</div>
+    {% else%}
+    <p><i>{{an.create_at|date:'Y-m-d'}}</i></p>
+    <h3>{{an.title}}</h3>
+    <div>{{an.content}}</div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+
+{% endblock %}
+

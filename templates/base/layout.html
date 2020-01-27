@@ -1,0 +1,64 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{settings.SITE_NAME}}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/app.css">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="container">
+      <a class="logo" href="/dashboard/">{{settings.SITE_NAME}}</a>
+      <div class="nav">
+        {% if user.is_authenticated %}
+          <a href="/dashboard/buy/">{% trans "Plan" %}</a>
+          <a href="/dashboard/">{% trans "Dashboard" %}</a>
+          <a href="/dashboard/info/">{{request.user.username}}</a>
+          <a href="/account/logout/" >{% trans "Logout" %}</a>
+        {% else %}
+          <a href="/account/login/" >{% trans "Login" %}</a>
+          <a href="/account/register/" >{% trans "Register" %}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="container">
+    {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="main-content">
+      {% block content %}
+      {% endblock %}
+    </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div class="container">
+      <p>
+        <a href="/language/?lang=en-us&next={{request.get_full_path}}">{% trans "English" %}</a>
+        <a href="/language/?lang=zh-hans&next={{request.get_full_path}}">{% trans "Chinese" %}</a>
+
+      </p>
+    </div>
+  </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% block foot %}
+{% endblock %}
+</body>
+</html>

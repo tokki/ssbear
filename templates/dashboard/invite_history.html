@@ -1,0 +1,29 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "Invite history" %}{% endblock %}
+
+{% block content %}
+  <div class="heading">
+    <h2> {% trans "Invite history" %}</h2>
+  </div>
+  <div class="section">
+    <h3>{% trans "Invite History" %}</h3>
+    <p>{% trans "You will get 10% benefit when the user purchase service"%}</p>
+    <table class="table">
+      <thead>
+        <th>{% trans "Create date" %}</th>
+        <th>{% trans "Email" %}</th>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{user.date_joined|date:'Y.m.d'}}</td>
+          <td>{{user.email}}</td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+

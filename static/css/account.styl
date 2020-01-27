@@ -1,0 +1,85 @@
+@import "base/normalize.css"
+@import "nib"
+
+body
+  color #495060
+  font-family -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji
+a
+  color #2d8cf0
+  text-decoration none
+  border-bottom 1px solid #2d8cf0
+  &:hover
+    opacity .8
+.btn
+  background #1c2438
+  border 0
+  padding 15px 30px
+  font-size 16px
+  color #fff
+  cursor pointer
+  width 100%
+  box-sizing border-box
+
+.wrap
+  max-width 400px
+  padding 20px
+  margin 30px auto
+
+.form
+  .form-group 
+    clearfix()
+    padding 10px 0px
+    label
+      display block
+      padding-bottom 5px
+      &:after
+        content ":"
+    input
+      padding 10px
+      width 100%
+      box-sizing border-box
+      background #eeeeee
+      color #495060
+      border 0px
+      font-family inherit
+      &:focus
+        border 0px 
+        background #e9eaec
+        outline none
+    ul.errorlist
+      list-style none
+      margin 0
+      display block
+      clear both
+      padding 5px 0px 0px 0px
+      font-size 14px
+      color #ed3f14
+  
+.messages
+  padding 0px
+  margin 20px 0px
+  list-style none
+  li
+    padding 20px
+    margin 0px
+  li.success
+    color #2c662d
+    background-color #fcfff5
+    box-shadow 0 0 0 1px #a3c293 inset, 0 0 0 0 transparent
+
+    
+    
+
+.section
+  padding-bottom 20px
+  .section-title
+    font-size 24px
+    margin-bottom 20px
+    color #666
+    b
+      font-size 32px
+      font-weight bold
+      color #000
+  .section-content
+    padding 10px 0px
+

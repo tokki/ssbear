@@ -1,0 +1,44 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "My service" %}{% endblock %}
+
+{% block content %}
+  <div class="heading">
+    <h2> {% trans "My service" %}</h2>
+  </div>
+  {% if not orders %}
+    <h3>{% trans "No service" %}</h3>
+    <p><a  class="btn primary" href="/dashboard/buy/">Get service</a></p>
+  {% else %}
+  <div class="section">
+    <table class="table">
+      <thead>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "Remark" %}</th>
+        <th>{% trans "Duration" %}</th>
+        <th>{% trans "Plan" %}</th>
+        <th>{% trans "Action" %}</th>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td >
+            {% if order.status == 0 %}
+              <span style="color:red">{% trans 'Disable' %}<span>
+            {% else %}
+              <span style="color:green">{% trans 'Enable' %}<span>
+            {% endif %}
+          </td>
+          <td>{{order.remark}}</td>
+          <td>{{order.create_at|date:'Y.m.d'}}~{{order.expired_at|date:'Y.m.d'}}</td>
+          <td>{{order.service.title}}</td>
+          <td><a href="/dashboard/order/{{order.id}}/" class="btn small">{% trans "Manage" %}</a></td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+{% endblock %}
+

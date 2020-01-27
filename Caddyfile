@@ -1,0 +1,8 @@
+www.ssbear.com/static {
+  root /var/www/ssbear/prod_static
+}
+www.ssbear.com {
+  proxy / localhost:8000 {
+    transparent
+  }
+}

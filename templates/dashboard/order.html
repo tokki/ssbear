@@ -1,0 +1,117 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "Manage service" %}{% endblock %}
+{% block foot %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+<script>
+  $(".qrcode").each(function(index,item){
+    $(item).qrcode($(item).attr("data-qrcode"))
+  })
+
+  $(".qrcode-js").each(function(index,item){
+    $(item).click(function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      $(item).find(".qrcode").toggle()
+    })
+  })
+</script>
+{% endblock %}
+
+{% block content %}
+  <div class="heading">
+    <h2>Order ID : <span style="color:red">{{order.id}}</span></h2>
+    <p>{% trans "Remark" %}: {{order.remark}}</p>
+  </div>
+  <div class="section">
+    <div class="traffic_info">
+      <div class="traffic_total" title="{{order.data_per_month}}GB">
+        <div class="traffic_used" style="width:{{order.percent}}%"></div>
+      </div>
+    </div>
+    <p>{% trans "Traffic Up" %}: {{order.traffic_up}}(MB)</p>
+    <p>{% trans "Traffic Down" %}: {{order.traffic_down}}(MB)</p>
+    <p>{% trans "Expired" %}: {{order.expired_at|date:'Y-m-d'}}</p>
+    <p>{% trans "Data per month" %}: {{order.data_per_month}}(GB)</p>
+    <p><a class="btn primary" href="/dashboard/chart/?oid={{order.id}}">{% trans "traffic details" %}</a></p>
+
+  </div>
+
+  <div class="section">
+    <h4>{% trans "Connect infomation" %}</h4>
+    <div class="cards">
+      <div class="card">
+        <h3>Shadowsocks</h3>
+        <p>{% trans "Port" %}: {{order.port}}</p>
+        <p>{% trans "Method" %}: {{order.method}}</p>
+        <p>{% trans "Password" %}: {{order.password}} <a class="btn small primary" href="/dashboard/change_ss_password/{{order.id}}/">{% trans "Change"%}</a></p>
+        <p>{% trans "Plugin" %}: none</p>
+        <p>{% trans "Obfuscation" %}: none</p>
+      </div>
+    
+      <div class="card">
+        <h3>V2ray</h3>
+        <p>{% trans "Protocol" %}: vmess</p>
+        <p>{% trans "Port" %}: 443</p>
+        <p>{% trans "UUID" %}: {{order.uuid}} <a class="btn small primary" href="/dashboard/change_uuid/{{order.id}}/">{% trans "Change"%}</a></p>
+        <p>{% trans "Method" %}: auto</p>
+        <p>{% trans "TLS" %}: true</p>
+        <p>{% trans "Obfuscation" %}: websocket</p>
+        <p>{% trans "Path" %}: /ws-test</p>
+        <p>Level: 0</p>
+        <p>AlterId: 4~64</p>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <h3>Host</h3>
+    <table class="table">
+      <thead>
+        <th>{% trans "Mode" %}</th>
+        <th>{% trans "Name" %}</th>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "Host" %}</th>
+        <th>{% trans "description" %}</th>
+        <th>{% trans "QR Code" %}</th>
+      </thead>
+      <tbody>
+        {% for node in nodes %}
+        <tr>
+          <td>
+            {% if node.mode == 0 %}
+            <span>Shadowsocks</span>
+            {% else %}
+            <span>V2ray</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if request.LANGUAGE_CODE == "zh-hans"%}
+            {{node.name_cn}}
+            {% else %}
+            {{node.name}}
+            {% endif %}
+          </td>
+          <td>0</td>
+          <td>{{node.host}}</td>
+          <td>
+            {% if request.LANGUAGE_CODE == "zh-hans"%}
+            {{node.description_cn}}
+            {% else %}
+            {{node.description}}
+            {% endif %}
+          </td>
+          <td><a href="#" class="qrcode-js btn small primary">{% trans "QR Code" %}
+            <div class="qrwrap">
+              <div data-qrcode="{{node.qrcode}}" class="qrcode"></div>
+            </div>
+            </a>
+          
+          </td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,82 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {{user.username}}{% endblock %}
+
+{% block content %}
+  <div class="section">
+    <h3>{% trans "Profile" %}</h3>
+    <p>{{user.username}}</p>
+    <p>{% trans "Member since"%} : {{user.date_joined|date:"Y-d-m"}}</p>
+  </div>
+  <div class="section">
+    <div class="more-right">
+      <a  class="btn small" href="/dashboard/add_credit/" >{% trans "add credit"%}</a>
+    </div>
+    <h3>{% trans "Remaining balance" %}</h3>
+    <p>{% trans "Balance"%} : {{user.balance}}RMB</p>
+    <p>
+      <a href="/dashboard/add_invite/"> 
+      {% trans "Earn more balance through our invite program"%}
+      </a>
+    </p>
+  </div>
+ 
+  
+  <div class="section">
+    <div class="more-right">
+      <a  class="btn small" href="/account/change_email/" >{% trans "Change email"%}</a>
+    </div>
+    <h3>{% trans "Email" %}</h3>
+    <p>{{user.email}} </p>
+  </div>
+
+  <div class="section">
+    <div class="more-right">
+      <a  class="btn small" href="/account/change_password/" >{% trans "Change Password"%}</a>
+    </div>
+    <h3>{% trans "Password" %}</h3>
+    <p>•••••••••••••</p>
+  </div>
+
+  <div class="section">
+    <h3>{% trans "Bill history" %}</h3>
+    <table class="table">
+      <thead>
+        <th>{% trans "Trade Number" %}</th>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Price" %}</th>
+        <th>{% trans "Info" %}</th>
+      </thead>
+      <tbody>
+        {% for bill in bills %}
+        <tr>
+          <td>{{bill.trade_no}}</td>
+          <td>{{bill.create_at|date:'Y-m-d'}}</td>
+          <td >
+            {% if not bill.status %}
+              <span style="color:red">-{{bill.price}}RMB</span>
+            {% else %}
+            <span style="color:green">+{{bill.price}}RMB</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if request.LANGUAGE_CODE == "zh-hans"%}
+            {{bill.info_cn}}
+            {% else %}
+            {{bill.info}}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+    <div class="more">
+      <a class="btn small" href="/dashboard/bill/">{% trans "All bill history" %}</a>
+    </div>
+  </div>
+
+
+
+{% endblock %}
+

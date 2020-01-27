@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}SSBEAR{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/account.css">
+</head>
+
+<body>
+<div class="wrap">
+
+  {% if messages %}
+  <div class="container">
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+
+	<div class="content">
+    <div class="container">
+		{% block content %}
+		
+		{% endblock %}
+    </div>
+	</div>
+</div>
+</body>
+</html>

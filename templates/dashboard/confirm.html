@@ -1,0 +1,35 @@
+{% extends "base/layout.html" %}
+{% load i18n %}
+
+{% block title %}{{settings.SITE_NAME}} › {% trans "Confirm order" %}{% endblock %}
+
+{% block content %}
+<div class="heading">
+  <h2>{% trans "Confirm order" %}</h2>
+</div>
+<div class="section">
+  {% if request.LANGUAGE_CODE == "zh-hans"%}
+    <h2>{{service.title_cn}}</h2>
+    <p>{{service.description_cn}}</p>
+  {% else %}
+    <h2>{{service.title}}</h2>
+    <p>{{service.description}}</p>
+  {% endif %}
+  <p>{% trans "Price" %}:<b class="price">{{service.price}}</b>{% trans "RMB" %}</p>
+  </div>
+  <form class="form" action="/dashboard/confirm/?sid={{service.id}}" method="post">
+      {% csrf_token %}
+      {% for field in form%}
+        <div class="form-group">
+          <label for="{{field.name}}">{{field.label}}</label>
+          {{field}}
+          {{field.errors}}
+        </div>
+      {% endfor %}
+      <div class="form-group">
+        <button type="submit" class="btn">{% trans "Submit" %}</button>
+      </div>
+  </form>
+</div>
+{% endblock %}
+
