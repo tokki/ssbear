@@ -6,7 +6,7 @@ python -m smtpd -n -c DebuggingServer localhost:1025
 
 ## install
 
-pip install django
+pip install django==2.2.9
 
 pip install python-dateutil
 
@@ -26,20 +26,6 @@ python manage.py crontab remove
 
 
 
-## i18n
-
-python manage.py makemessages -l zh_Hans 
-
-!!!在setting里面是zh-hans 语言包是下划线 不然有空格的英文将无法被翻译
-
-!!!在debian上语言包名字为 zh_Hans 大写H 不然也会出奇怪问题 
-
-python manage.py makemessages -a
-
-python manage.py compilemessages
-
-
-
 ## todo
 
 - [ ] Save traffic to redis and show it in graphic 
@@ -51,3 +37,4 @@ python manage.py compilemessages
 - [x] make dashboard support mobile
 - [x] make interface simple , no need to support mobile
 - [x] recode invite code
+- [x] remove i18n

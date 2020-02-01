@@ -1,12 +1,11 @@
 {% extends "account/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Register" %} {% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 注册 {% endblock %}
 
 {% block content %}
 <div class="section">
     <div class="section-title">
-      <b>{{settings.SITE_NAME}}</b> › {% trans "Register" %} 
+      <b>{{settings.SITE_NAME}}</b> › 注册
     </div>
     <div class="section-content">
       <form class="form" action="{% url 'register' %}" method="post">
@@ -19,11 +18,11 @@
             </div>
           {% endfor %}
           <div class="form-group">
-            <button type="submit" class="btn">  {% trans "Submit" %}  </button>
+            <button type="submit" class="btn"> 提交 </button>
           </div>
 
           <div class="form-group">
-            <p><a href="{% url 'login' %}">{% trans "Login" %} </a></p>
+            <p><a href="{% url 'login' %}">登陆 </a></p>
           </div>
       </form>
     </div>

@@ -1,21 +1,15 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Confirm order" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 确认订单{% endblock %}
 
 {% block content %}
 <div class="heading">
-  <h2>{% trans "Confirm order" %}</h2>
+  <h2>确认订单</h2>
 </div>
 <div class="section">
-  {% if request.LANGUAGE_CODE == "zh-hans"%}
-    <h2>{{service.title_cn}}</h2>
-    <p>{{service.description_cn}}</p>
-  {% else %}
-    <h2>{{service.title}}</h2>
-    <p>{{service.description}}</p>
-  {% endif %}
-  <p>{% trans "Price" %}:<b class="price">{{service.price}}</b>{% trans "RMB" %}</p>
+  <h2>{{service.title}}</h2>
+  <p>{{service.description}}</p>
+  <p>价格:<b class="price">{{service.price}}</b>RMB</p>
   </div>
   <form class="form" action="/dashboard/confirm/?sid={{service.id}}" method="post">
       {% csrf_token %}
@@ -27,7 +21,7 @@
         </div>
       {% endfor %}
       <div class="form-group">
-        <button type="submit" class="btn">{% trans "Submit" %}</button>
+        <button type="submit" class="btn">提交</button>
       </div>
   </form>
 </div>

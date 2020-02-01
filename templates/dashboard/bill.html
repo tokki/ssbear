@@ -1,20 +1,19 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Bill" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 账单{% endblock %}
 
 {% block content %}
   <div class="heading">
-    <h2>{% trans "Bill" %}</h2>
+    <h2>账单</h2>
   </div>
   <div class="section">
-    <h3>{% trans "Balance" %}: {{request.user.balance}}</h3>
+    <h3>余额: {{request.user.balance}}RMB</h3>
     <table class="table">
       <thead>
-        <th>{% trans "Trade Number" %}</th>
-        <th>{% trans "Date" %}</th>
-        <th>{% trans "Price" %}</th>
-        <th>{% trans "Info" %}</th>
+        <th>交易单号</th>
+        <th>交易日期</th>
+        <th>价格</th>
+        <th>信息</th>
       </thead>
       <tbody>
         {% for bill in bills %}
@@ -29,11 +28,7 @@
             {% endif %}
           </td>
           <td>
-            {% if request.LANGUAGE_CODE == "zh-hans"%}
-            {{bill.info_cn}}
-            {% else %}
             {{bill.info}}
-            {% endif %}
           </td>
         </tr>
         {% endfor%}

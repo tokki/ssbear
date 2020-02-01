@@ -1,51 +1,50 @@
 from django import forms
-from django.utils.translation import gettext_lazy as _
 from .models import Service, Order
 
 
 class OrderForm(forms.Form):
     remark = forms.CharField(
-        label=_('Remark'),
+        label='备注名',
         error_messages={
-            'required': _('Please file out this field'),
+            'required': '不能为空',
         },
     )
     password = forms.CharField(
-        label=_('Shadowsocks password'),
+        label='Shadowsocks密码',
         error_messages={
-            'required': _('Please file out this field'),
+            'required': '不能为空',
         },
     )
 
 
 class ChangeSSForm(forms.Form):
     password = forms.CharField(
-        label=_('Password'),
+        label='密码',
         error_messages={
-            'required': _('Please file out this field'),
+            'required': '不能为空',
         },
     )
 
 
 class InviteForm(forms.Form):
     text = forms.SlugField(
-        label=_('Text'),
+        label='字符',
         error_messages={
-            'required': _('Please file out this field'),
-            'invalid': _('Text only contains letter number _-'),
+            'required': '不能为空',
+            'invalid': '字符只能包含a-z A-Z _ - ',
         },
     )
     times = forms.IntegerField(
-        label=_('Times'),
+        label='次数',
         error_messages={
-            'required': _('Please file out this field'),
-            'invalid': _('Number format error'),
+            'required': '不能为空',
+            'invalid': '只可以是数字',
         },
     )
     days = forms.IntegerField(
-        label=_('During days'),
+        label='有效天数',
         error_messages={
-            'required': _('Please file out this field'),
-            'invalid': _('Number format error'),
+            'required': '不能为空',
+            'invalid': '只可以是数字',
         },
     )

@@ -1,39 +1,38 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "My service" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 我的服务{% endblock %}
 
 {% block content %}
   <div class="heading">
-    <h2> {% trans "My service" %}</h2>
+    <h2>我的服务</h2>
   </div>
   {% if not orders %}
-    <h3>{% trans "No service" %}</h3>
-    <p><a  class="btn primary" href="/dashboard/buy/">Get service</a></p>
+    <h3>你还没有购买服务</h3>
+    <p><a  class="btn primary" href="/dashboard/buy/">快去购买</a></p>
   {% else %}
   <div class="section">
     <table class="table">
       <thead>
-        <th>{% trans "Status" %}</th>
-        <th>{% trans "Remark" %}</th>
-        <th>{% trans "Duration" %}</th>
-        <th>{% trans "Plan" %}</th>
-        <th>{% trans "Action" %}</th>
+        <th>状态</th>
+        <th>备注名</th>
+        <th>有效期</th>
+        <th>套餐类型</th>
+        <th>操作</th>
       </thead>
       <tbody>
         {% for order in orders %}
         <tr>
           <td >
             {% if order.status == 0 %}
-              <span style="color:red">{% trans 'Disable' %}<span>
+              <span style="color:red">停止<span>
             {% else %}
-              <span style="color:green">{% trans 'Enable' %}<span>
+              <span style="color:green">运行中<span>
             {% endif %}
           </td>
           <td>{{order.remark}}</td>
           <td>{{order.create_at|date:'Y.m.d'}}~{{order.expired_at|date:'Y.m.d'}}</td>
           <td>{{order.service.title}}</td>
-          <td><a href="/dashboard/order/{{order.id}}/" class="btn small">{% trans "Manage" %}</a></td>
+          <td><a href="/dashboard/order/{{order.id}}/" class="btn small">管理</a></td>
         </tr>
         {% endfor%}
       </tbody>

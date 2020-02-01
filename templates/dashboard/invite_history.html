@@ -1,19 +1,17 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Invite history" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 邀请记录{% endblock %}
 
 {% block content %}
   <div class="heading">
-    <h2> {% trans "Invite history" %}</h2>
+    <h2>邀请记录</h2>
   </div>
   <div class="section">
-    <h3>{% trans "Invite History" %}</h3>
-    <p>{% trans "You will get 10% benefit when the user purchase service"%}</p>
+    <h3>当你邀请的对象购买服务的时候你会得到10%收益作为奖励</h3>
     <table class="table">
       <thead>
-        <th>{% trans "Create date" %}</th>
-        <th>{% trans "Email" %}</th>
+        <th>邀请日期</th>
+        <th>邀请对象的邮箱</th>
       </thead>
       <tbody>
         {% for user in users %}

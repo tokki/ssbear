@@ -1,12 +1,11 @@
 {% extends "account/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Reset password" %} {% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 重置密码 {% endblock %}
 
 {% block content %}
 	<div class="section">
     <div class="section-title">
-      <b>{{settings.SITE_NAME}}</b> ›  {% trans "Reset password" %} 
+      <b>{{settings.SITE_NAME}}</b> › 重置密码
     </div>
     <div class="section-content">
       <form  class="form" action="{% url 'send-code' %}" method="post">
@@ -19,19 +18,17 @@
             </div>
           {% endfor %}
           <div class="form-group">
-            <button type="submit" class="btn">  {% trans "Submit" %} </button>
+            <button type="submit" class="btn">提交</button>
           </div>
-
           <div class="form-group">
             <p>
-              <a href="{% url 'register' %}"> {% trans "Register" %} </a>
+              <a href="{% url 'register' %}">注册</a>
               &nbsp;
               &nbsp;
-              <a href="{% url 'login' %}"> {% trans "Login" %} </a>
+              <a href="{% url 'login' %}">登陆</a>
             </p>
           </div>
       </form>
     </div>
 	</div>
 {% endblock %}
-

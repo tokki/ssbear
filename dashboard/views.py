@@ -14,7 +14,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth import update_session_auth_hash
 import django.utils.timezone as timezone
-from django.utils.translation import gettext as _
 from django.db import transaction
 from dateutil.relativedelta import relativedelta
 import json
@@ -72,10 +71,7 @@ def confirm(request):
             password = form.cleaned_data['password']
             with transaction.atomic():
                 if user.balance < service.price:
-                    messages.warning(
-                        request,
-                        _('Not enough balance,please add credit'),
-                    )
+                    messages.warning(request, '余额不足，请充值')
                     return redirect('/dashboard/add_credit/')
                 # use transaction to make the payment safe
                 now = timezone.now()
@@ -124,7 +120,7 @@ def confirm(request):
 
                 user.balance = user.balance - service.price
                 user.save()
-                messages.success(request, _('Purchase success'))
+                messages.success(request, '购买成功')
             return redirect('/dashboard/my_service/')
     else:
         form = OrderForm()
@@ -152,14 +148,16 @@ def invite_history(request):
     users = User.objects.filter(inviter_id=request.user.id).all()
     return render(request, 'dashboard/invite_history.html', locals())
 
+
 @login_required
 def add_credit(request):
     return HttpResponse("not ready yet")
 
+
 @login_required
 def add_invite(request):
     if not settings.INVITE_CODE:
-        return HttpResponse(_("invite is disabled"), 404)
+        return HttpResponse("邀请功能暂时禁用", 403)
 
     if request.method == 'POST':
         form = InviteForm(request.POST)
@@ -169,17 +167,17 @@ def add_invite(request):
             days = form.cleaned_data['days']
             inv = InviteCode.objects.filter(user_id=request.user.id).first()
             if inv:
-                inv.text=text
-                inv.times=times
-                inv.days=days
+                inv.text = text
+                inv.times = times
+                inv.days = days
                 inv.save()
-                messages.success(request, _('Invite code has been changed'))
+                messages.success(request, '邀请码更新成功')
                 return redirect('/dashboard/')
 
             text = form.cleaned_data['text']
             invite = InviteCode.objects.filter(text=text).first()
             if invite:
-                form.add_error('text', _('Try another text'))
+                form.add_error('text', '换一个试试')
                 return render(request, 'dashboard/add_invite.html', locals())
             else:
                 newinv = InviteCode(
@@ -189,7 +187,7 @@ def add_invite(request):
                     user_id=request.user.id,
                 )
                 newinv.save()
-                messages.success(request, _('Invite code has been create'))
+                messages.success(request, '邀请码创建成功')
             return redirect('/dashboard/')
     else:
         form = InviteForm()
@@ -240,7 +238,7 @@ def change_ss_password(request, oid):
             password = form.cleaned_data['password']
             order.password = password
             order.save()
-            messages.success(request, _('Password has beend changed'))
+            messages.success(request, '密码已被修改')
             return redirect('/dashboard/order/' + str(order.id))
     else:
         form = ChangeSSForm()
@@ -261,16 +259,17 @@ def change_uuid(request, oid):
         uuid = order.gen_uuid()
         order.uuid = uuid
         order.save()
-        messages.success(request, _('UUID has beend changed'))
+        messages.success(request, 'UUID修改成功')
         return redirect('/dashboard/order/' + str(order.id))
     else:
         return render(request, 'dashboard/change_uuid.html', locals())
 
+
 @login_required
 def chart(request):
-    oid = request.GET.get('oid',None)
+    oid = request.GET.get('oid', None)
     order = Order.objects.filter(id=oid).first()
-    if not order :
+    if not order:
         return HttpResponse("error", 404)
     if order.user_id != request.user.id:
         return HttpResponse("error", 404)
@@ -280,11 +279,9 @@ def chart(request):
     for t in traffics:
         k = str(t.create_at.date())
         if k not in dd.keys():
-            dd[k] = t.traffic_down +t.traffic_up
+            dd[k] = t.traffic_down + t.traffic_up
         else:
-            dd[k] += t.traffic_down +t.traffic_up
+            dd[k] += t.traffic_down + t.traffic_up
     resp = json.dumps(dd)
 
-
-    return render(request,'dashboard/chart.html',locals())
- 
+    return render(request, 'dashboard/chart.html', locals())

@@ -4,11 +4,10 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib import messages
-from django.utils.translation import gettext as _
 from .models import InviteCode
 from .models import ResetCode
 from .forms import RegisterForm, LoginForm, ChangePasswordForm, SendCodeForm
-from .forms import ResetPasswordForm,EmailForm
+from .forms import ResetPasswordForm, EmailForm
 from .forms import ChangePasswordForm
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth import update_session_auth_hash
@@ -49,17 +48,20 @@ def login_view(request):
                 password=password,
             )
             if user:
-                messages.success(request, _('Login Success'))
+                messages.success(request, '登录成功')
                 login(request, user)
                 return redirect('/dashboard/')
             else:
-                form.add_error('username', _('account or password error'))
+                form.add_error('username', '用户名或密码错误')
     else:
         form = LoginForm()
     return render(request, 'account/login.html', locals())
 
 
 def send_code_view(request):
+    if not settings.MAILGUN:
+        return HttpResponse('reset code function disable',403)
+
     if request.method == 'POST':
         form = SendCodeForm(request.POST)
         if form.is_valid():
@@ -69,14 +71,13 @@ def send_code_view(request):
                 res = ResetCode.objects.filter(email=email).first()
                 if res:
                     timezone.now() < res.create_at + timedelta(minutes=60)
-                    form.add_error('email', _('Please try later'))
+                    form.add_error('email', '过一会再试试')
                 else:
                     send_code(user)
-                    messages.success(request,
-                                     _('Send success, plz check your email'))
+                    messages.success(request, '发送成功，注意查看邮箱')
                     return redirect('/account/reset_password/?q=' + email)
             else:
-                form.add_error('email', _('Please try later'))
+                form.add_error('email', '过一会再试试')
     else:
         form = SendCodeForm()
     return render(request, 'account/send_code.html', locals())
@@ -91,7 +92,7 @@ def reset_password_view(request):
             new = form.cleaned_data['new']
             new2 = form.cleaned_data['new2']
             if new != new2:
-                form.add_error('new2', _('Not the same password your input'))
+                form.add_error('new2', '两次输入的不一致')
                 return render(request, 'account/reset_password.html', locals())
             else:
                 res = ResetCode.objects.filter(email=email).first()
@@ -99,10 +100,10 @@ def reset_password_view(request):
                     user = User.objects.filter(email=email).first()
                     user.set_password(new)
                     user.save()
-                    messages.success(request, _('Password change success'))
+                    messages.success(request, '密码修改成功')
                     return redirect('/account/login/')
                 else:
-                    form.add_error('code', _('Reset code error'))
+                    form.add_error('code', '验证码错误')
     else:
         email = request.GET.get('q')
         form = ResetPasswordForm(initial={'email': email})
@@ -124,17 +125,17 @@ def register_view(request):
             password = form.cleaned_data['password']
             inv = InviteCode.objects.filter(text=invite).first()
             if not inv:
-                form.add_error('invite', _('Invite code error'))
+                form.add_error('invite', '邀请码错误')
                 return render(request, 'account/register.html', locals())
             else:
                 expired = timezone.now() > inv.create_at + timedelta(
                     days=inv.days)
                 if expired or inv.times < 1:
-                    form.add_error('invite', _('Invite code error'))
+                    form.add_error('invite', '邀请码错误')
                     return render(request, 'account/register.html', locals())
                 u = User.objects.filter(username=username).first()
                 if u:
-                    form.add_error('username', _('Account name already exist'))
+                    form.add_error('username', '用户名已存在')
                     return render(request, 'account/register.html', locals())
                 else:
                     newuser = User.objects.create_user(
@@ -148,7 +149,7 @@ def register_view(request):
                     newuser.save()
                     inv.times = inv.times - 1
                     inv.save()
-                    messages.success(request, _('Login success'))
+                    messages.success(request, '登录成功')
                     login(request, newuser)
                     return redirect('/dashboard/')
     else:
@@ -171,16 +172,15 @@ def change_password_view(request):
             )
             if user:
                 if new != new2:
-                    form.add_error('new2',
-                                   _('Not the same password your input'))
+                    form.add_error('new2', '两次输入的不一致')
                 else:
                     user.set_password(new)
                     user.save()
                     update_session_auth_hash(request, user)
-                    messages.success(request, _('Password has been changed'))
+                    messages.success(request, '密码修改成功')
                     return redirect('/dashboard/')
             else:
-                form.add_error('old', _('Password error'))
+                form.add_error('old', '旧密码错误')
     else:
         form = ChangePasswordForm()
 
@@ -196,7 +196,7 @@ def change_email_view(request):
             u = User.objects.filter(id=request.user.id).first()
             u.email = email
             u.save()
-            messages.success(request, _('Email has been changed'))
+            messages.success(request, '邮箱修改成功')
     else:
         form = EmailForm()
     return render(request, 'account/change_email.html', locals())

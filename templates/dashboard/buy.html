@@ -1,35 +1,25 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Buy service" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 购买服务{% endblock %}
 
 {% block content %}
   <div class="heading">
-    <h2>{% trans "Buy service" %}</h2>
+    <h2>购买服务</h2>
   </div>
   <div class="section">
-    <h2>{% trans "Your balance" %}: {{request.user.balance}}RMB</h2>
+    <h2>余额: {{request.user.balance}}RMB</h2>
     <div class="cards">
     {% for service in service_list %}
         <div class="card">
           <h2>
-            {% if request.LANGUAGE_CODE == "zh-hans"%}
-            {{service.title_cn}}
-            {% else %}
             {{service.title}}
-            {% endif %}
           </h2>
           <p>
-            {% if request.LANGUAGE_CODE == "zh-hans"%}
-            {{service.description_cn}}
-            {% else %}
             {{service.description}}
-            {% endif %}
           </p>
-          <p>{% trans "Price" %}:<b class="price">{{service.price}}</b>
-            {% trans "RMB" %}
+          <p>价格:<b class="price">{{service.price}}</b>"RMB"
           </p>
-          <p ><a href="/dashboard/confirm/?sid={{service.id}}" class="btn primary">{% trans "Order Now" %}</a></p>
+          <p ><a href="/dashboard/confirm/?sid={{service.id}}" class="btn primary">立刻购买</a></p>
         </div>
     {% endfor%}
     </div>

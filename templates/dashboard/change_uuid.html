@@ -1,21 +1,20 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Change UUID" %} {% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 修改UUID {% endblock %}
 
 {% block content %}
 <div class="heading">
-  <h2> {% trans "Change UUID" %} </h2>
+  <h2>修改UUID </h2>
 </div>
 <div class="section">
-  <h4>{% trans "UUID:"%}{{order.uuid}}</h4>
-  <p>{% trans "Are you sure you want to change UUID"%}</p>
+  <h4>UUID:{{order.uuid}}</h4>
+  <p>你确定要修改UUID吗</p>
   <form class="form normal" action="/dashboard/change_uuid/{{order.id}}/" method="post">
       {% csrf_token %}
       <input type="hidden" name="change" value="1"/>
       <div class="form-group">
-        <a  class="btn" href="/dashboard/order/{{order.id}}">{% trans "Cancel"%}</a>
-        <button type="submit" class="btn primary"> {% trans "Submit" %}  </button>
+        <a  class="btn" href="/dashboard/order/{{order.id}}">撤销</a>
+        <button type="submit" class="btn primary">提交 </button>
       </div>
   </form>
 </div>

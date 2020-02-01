@@ -1,71 +1,65 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Dashboard" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 控制面板{% endblock %}
 
 {% block content %}
   <div class="section">
     <div class="announcement">
-      {% if request.LANGUAGE_CODE == "zh-hans"%}
-      <h3>{{ann.title_cn}}</h3>
-      <p>{{ann.content_cn}}</p>
-      {% else %}
       <h3>{{ann.title}}</h3>
       <p>{{ann.content}}</p>
-      {% endif %}
-      <p><a href="/dashboard/announcement/">{% trans "More" %}</a></p>
+      <p><a href="/dashboard/announcement/">更多公告</a></p>
     </div>
   </div>
 
   <div class="section">
 
     <div class="more-right">
-      <a  class="btn small primary" href="/dashboard/buy/">{% trans "Buy service"%}</a>
+      <a  class="btn small primary" href="/dashboard/buy/">购买服务</a>
     </div>
-    <h4>{% trans "My service" %}</h4>
+    <h3>我的服务</h3>
     <table class="table">
       <thead>
-        <th>{% trans "Status" %}</th>
-        <th>{% trans "Remark" %}</th>
-        <th>{% trans "Duration" %}</th>
-        <th>{% trans "Plan" %}</th>
-        <th>{% trans "Action" %}</th>
+        <th>状态</th>
+        <th>备注名</th>
+        <th>有效期</th>
+        <th>套餐</th>
+        <th>操作</th>
       </thead>
       <tbody>
         {% for order in orders %}
         <tr>
           <td >
             {% if order.status == 0 %}
-              <span style="color:red">{% trans 'Disable' %}<span>
+              <span style="color:red">停止<span>
             {% else %}
-              <span style="color:green">{% trans 'Enable' %}<span>
+              <span style="color:green">运行中<span>
             {% endif %}
           </td>
           <td>{{order.remark}}</td>
           <td>{{order.create_at|date:'Y.m.d'}}~{{order.expired_at|date:'Y.m.d'}}</td>
           <td>{{order.service.title}}</td>
-          <td><a href="/dashboard/order/{{order.id}}/" class="btn small">{% trans "Manage" %}</a></td>
+          <td><a href="/dashboard/order/{{order.id}}/" class="btn small">管理</a></td>
         </tr>
         {% endfor%}
       </tbody>
     </table>
-    <div class="more"><a  class="btn small" href="/dashboard/my_service/">{% trans "All service"%}</a></div>
+    <div class="more"><a  class="btn small" href="/dashboard/my_service/">全部服务</a></div>
   </div>
   
   <div class="section">
     <div class="more-right">
-      <a  class="btn small primary" href="/dashboard/add_invite/" >{% trans "Create new invite code"%}</a>
+      <a  class="btn small primary" href="/dashboard/add_invite/" >创建邀请码</a>
     </div>
-    <h3>{% trans "Invite code" %}</h3>
-    <p>邀请码:{{inv.text}} | 剩余{{inv.times}}次 | 过期时间为{{inv.expired|date:"Y-d-m"}}</p>
-  </div>
-  <div class="section">
+    <h3>邀请</h3>
+    <h2>邀请码:{{inv.text}}</h2>
+    <p>剩余{{inv.times}}次 | 过期时间为{{inv.expired|date:"Y-d-m"}}</p>
+    <br/>
 
-    <h4>{% trans "Invite History" %}</h4>
+    <h4>邀请记录</h4>
     <table class="table">
       <thead>
-        <th>{% trans "Create date" %}</th>
-        <th>{% trans "Email" %}</th>
+        <th>日期</th>
+        <th>邀请对象邮箱</th>
       </thead>
       <tbody>
         {% for user in users %}
@@ -77,20 +71,18 @@
       </tbody>
     </table>
     <div class="more">
-      <a class="btn small" href="/dashboard/invite_history/">{% trans "All invite history" %}</a>
+      <a class="btn small" href="/dashboard/invite_history/">全部邀请记录</a>
     </div>
   </div>
 
-
-
   <div class="section">
-    <h3>{% trans "Download" %}</h3>
+    <h3>客户端下载</h3>
     <p>Windows:<a href="https://github.com/2dust/v2rayN">v2rayN</a></p>
     <p>Mac:<a href="https://github.com/yanue/V2rayU">v2rayU</a></p>
     <p>iOS:<a href="https://apps.apple.com/us/app/shadowrocket/id932747118">App Store</a></p>
     <p>Android:<a href="https://apkpure.com/bifrostv/com.github.dawndiy.bifrostv">BifrostV</a></p>
     <div class="more">
-      <a class="btn small" href="/dashboard/download/">{% trans "Learn More" %}</a>
+      <a class="btn small" href="/dashboard/download/">了解更多</a>
     </div>
   </div>
 

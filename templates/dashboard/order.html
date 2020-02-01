@@ -1,7 +1,6 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Manage service" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 管理服务{% endblock %}
 {% block foot %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 <script>
@@ -21,8 +20,8 @@
 
 {% block content %}
   <div class="heading">
-    <h2>Order ID : <span style="color:red">{{order.id}}</span></h2>
-    <p>{% trans "Remark" %}: {{order.remark}}</p>
+    <h2>服务ID: {{order.id}}</h2>
+    <p>备注名: {{order.remark}}</p>
   </div>
   <div class="section">
     <div class="traffic_info">
@@ -30,50 +29,50 @@
         <div class="traffic_used" style="width:{{order.percent}}%"></div>
       </div>
     </div>
-    <p>{% trans "Traffic Up" %}: {{order.traffic_up}}(MB)</p>
-    <p>{% trans "Traffic Down" %}: {{order.traffic_down}}(MB)</p>
-    <p>{% trans "Expired" %}: {{order.expired_at|date:'Y-m-d'}}</p>
-    <p>{% trans "Data per month" %}: {{order.data_per_month}}(GB)</p>
-    <p><a class="btn primary" href="/dashboard/chart/?oid={{order.id}}">{% trans "traffic details" %}</a></p>
-
+    <p>上传数据量: {{order.traffic_up}}(MB)</p>
+    <p>下载数据量: {{order.traffic_down}}(MB)</p>
+    <p>过期时间: {{order.expired_at|date:'Y-m-d'}}</p>
+    <p>每月数据量: {{order.data_per_month}}(GB)</p>
+    <p><a class="btn primary" href="/dashboard/chart/?oid={{order.id}}">查看数据用量详情</a></p>
   </div>
 
   <div class="section">
-    <h4>{% trans "Connect infomation" %}</h4>
+    <h4>连接设置信息</h4>
+    <p>正常情况下扫码就可以添加节点到客户端，如果出错就只好麻烦您手工核对以下信息</p>
     <div class="cards">
       <div class="card">
         <h3>Shadowsocks</h3>
-        <p>{% trans "Port" %}: {{order.port}}</p>
-        <p>{% trans "Method" %}: {{order.method}}</p>
-        <p>{% trans "Password" %}: {{order.password}} <a class="btn small primary" href="/dashboard/change_ss_password/{{order.id}}/">{% trans "Change"%}</a></p>
-        <p>{% trans "Plugin" %}: none</p>
-        <p>{% trans "Obfuscation" %}: none</p>
+        <p>Port: {{order.port}}</p>
+        <p>Method: {{order.method}}</p>
+        <p>Password: {{order.password}} <a class="btn small primary" href="/dashboard/change_ss_password/{{order.id}}/">修改</a></p>
+        <p>Plugin: none</p>
+        <p>Obfuscation: none</p>
       </div>
     
       <div class="card">
         <h3>V2ray</h3>
-        <p>{% trans "Protocol" %}: vmess</p>
-        <p>{% trans "Port" %}: 443</p>
-        <p>{% trans "UUID" %}: {{order.uuid}} <a class="btn small primary" href="/dashboard/change_uuid/{{order.id}}/">{% trans "Change"%}</a></p>
-        <p>{% trans "Method" %}: auto</p>
-        <p>{% trans "TLS" %}: true</p>
-        <p>{% trans "Obfuscation" %}: websocket</p>
-        <p>{% trans "Path" %}: /ssbear</p>
+        <p>Protocol: vmess</p>
+        <p>Port: 443</p>
+        <p>UUID: {{order.uuid}} <a class="btn small primary" href="/dashboard/change_uuid/{{order.id}}/">修改</a></p>
+        <p>Method: auto</p>
+        <p>TLS: true</p>
+        <p>Obfuscation: websocket</p>
+        <p>Path: /ssbear</p>
         <p>Level: 0</p>
         <p>AlterId: 4~64</p>
       </div>
     </div>
   </div>
   <div class="section">
-    <h3>Host</h3>
+    <h3>节点</h3>
     <table class="table">
       <thead>
-        <th>{% trans "Mode" %}</th>
-        <th>{% trans "Name" %}</th>
-        <th>{% trans "Status" %}</th>
-        <th>{% trans "Host" %}</th>
-        <th>{% trans "description" %}</th>
-        <th>{% trans "QR Code" %}</th>
+        <th>模式</th>
+        <th>名称</th>
+        <th>状态</th>
+        <th>地址</th>
+        <th>描述</th>
+        <th>QR Code</th>
       </thead>
       <tbody>
         {% for node in nodes %}
@@ -86,22 +85,14 @@
             {% endif %}
           </td>
           <td>
-            {% if request.LANGUAGE_CODE == "zh-hans"%}
-            {{node.name_cn}}
-            {% else %}
             {{node.name}}
-            {% endif %}
           </td>
           <td>0</td>
           <td>{{node.host}}</td>
           <td>
-            {% if request.LANGUAGE_CODE == "zh-hans"%}
-            {{node.description_cn}}
-            {% else %}
             {{node.description}}
-            {% endif %}
           </td>
-          <td><a href="#" class="qrcode-js btn small primary">{% trans "QR Code" %}
+          <td><a href="#" class="qrcode-js btn small primary">点击扫码添加节点
             <div class="qrwrap">
               <div data-qrcode="{{node.qrcode}}" class="qrcode"></div>
             </div>

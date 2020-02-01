@@ -1,52 +1,49 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
 {% block title %}{{settings.SITE_NAME}} › {{user.username}}{% endblock %}
 
 {% block content %}
   <div class="section">
-    <h3>{% trans "Profile" %}</h3>
+    <h3>用户档案</h3>
     <p>{{user.username}}</p>
-    <p>{% trans "Member since"%} : {{user.date_joined|date:"Y-d-m"}}</p>
+    <p>加入日期: {{user.date_joined|date:"Y-d-m"}}</p>
   </div>
   <div class="section">
     <div class="more-right">
-      <a  class="btn small" href="/dashboard/add_credit/" >{% trans "add credit"%}</a>
+      <a  class="btn small" href="/dashboard/add_credit/" >充值</a>
     </div>
-    <h3>{% trans "Remaining balance" %}</h3>
-    <p>{% trans "Balance"%} : {{user.balance}}RMB</p>
+    <h3>余额</h3>
+    <p>{{user.balance}}RMB</p>
     <p>
-      <a href="/dashboard/add_invite/"> 
-      {% trans "Earn more balance through our invite program"%}
-      </a>
+      <a href="/dashboard/add_invite/"> 试试我们的邀请计划，帮助更多热爱生活的朋友 </a>
     </p>
   </div>
  
   
   <div class="section">
     <div class="more-right">
-      <a  class="btn small" href="/account/change_email/" >{% trans "Change email"%}</a>
+      <a  class="btn small" href="/account/change_email/" >修改邮箱</a>
     </div>
-    <h3>{% trans "Email" %}</h3>
+    <h3>邮箱</h3>
     <p>{{user.email}} </p>
   </div>
 
   <div class="section">
     <div class="more-right">
-      <a  class="btn small" href="/account/change_password/" >{% trans "Change Password"%}</a>
+      <a  class="btn small" href="/account/change_password/" >修改密码</a>
     </div>
-    <h3>{% trans "Password" %}</h3>
+    <h3>密码</h3>
     <p>•••••••••••••</p>
   </div>
 
   <div class="section">
-    <h3>{% trans "Bill history" %}</h3>
+    <h3>历史账单</h3>
     <table class="table">
       <thead>
-        <th>{% trans "Trade Number" %}</th>
-        <th>{% trans "Date" %}</th>
-        <th>{% trans "Price" %}</th>
-        <th>{% trans "Info" %}</th>
+        <th>交易单号</th>
+        <th>日期</th>
+        <th>价格</th>
+        <th>信息</th>
       </thead>
       <tbody>
         {% for bill in bills %}
@@ -61,18 +58,14 @@
             {% endif %}
           </td>
           <td>
-            {% if request.LANGUAGE_CODE == "zh-hans"%}
-            {{bill.info_cn}}
-            {% else %}
             {{bill.info}}
-            {% endif %}
           </td>
         </tr>
         {% endfor%}
       </tbody>
     </table>
     <div class="more">
-      <a class="btn small" href="/dashboard/bill/">{% trans "All bill history" %}</a>
+      <a class="btn small" href="/dashboard/bill/">查看全部账单</a>
     </div>
   </div>
 

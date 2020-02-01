@@ -7,7 +7,6 @@ import random
 import base64
 import json
 import uuid
-from django.utils.translation import gettext_lazy as _
 
 
 # Create your models here.
@@ -28,8 +27,8 @@ class Announcement(models.Model):
 
 class Node(models.Model):
     MODE = [
-        (0, _('Shadowsocks')),
-        (1, _('V2ray')),
+        (0, 'Shadowsocks'),
+        (1, 'V2ray'),
     ]
     name = models.CharField(max_length=40)
     name_cn = models.CharField(max_length=40)
@@ -49,9 +48,9 @@ class Node(models.Model):
 
 class Bill(models.Model):
     PAYMENT = (
-        (0, _('alipay face to face')),
-        (1, _('aff from user')),
-        (5, _('buy service')),
+        (0, 'alipay当面付'),
+        (1, '邀请用户奖励'),
+        (5, '购买服务'),
     )
     user_id = models.IntegerField(default=0)
     info = models.CharField(max_length=40)
@@ -98,8 +97,8 @@ class Service(models.Model):
 
 class Order(models.Model):
     STATUS = [
-        (0, _('disable')),
-        (1, _('enable')),
+        (0, '停止'),
+        (1, '运行中'),
     ]
     user_id = models.IntegerField(default=0)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
@@ -143,8 +142,8 @@ class Order(models.Model):
     def gen_uuid(cls):
         return uuid.uuid4()
 
-    def ss_link(cls, node):
-        s = f"{self.method}:{self.passowrd}@{node.host}:{self.port}"
+    def ss_link(self, node):
+        s = f"{self.method}:{self.password}@{node.host}:{self.port}"
         v = f"ss://{base64.urlsafe_b64encode(s.encode()).decode()}"
         return uuid.uuid4()
 
@@ -170,8 +169,8 @@ class Order(models.Model):
 class TrafficLog(models.Model):
     order_id = models.IntegerField()
     create_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    traffic_up = models.BigIntegerField(_("Upload traffic"), default=0)
-    traffic_down = models.BigIntegerField(_("download Traffic"), default=0)
+    traffic_up = models.BigIntegerField('上传数据量', default=0)
+    traffic_down = models.BigIntegerField('下载数据量', default=0)
 
     def __str__(self):
         return str(self.create_at)

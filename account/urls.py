@@ -5,7 +5,6 @@ from django.contrib.auth import views as auth
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('language/', views.set_language, name='lang'),
     path('account/login/', views.login_view, name='login'),
     path('account/register/', views.register_view,name='register'),
     path('account/logout/', views.logout_view,name='logout'),

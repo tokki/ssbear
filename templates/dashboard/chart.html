@@ -1,7 +1,6 @@
 {% extends "base/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Manage service" %}{% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 详细流量{% endblock %}
 {% block foot %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
@@ -18,7 +17,7 @@
       data: {
           labels: Object.keys(data),
           datasets: [{
-              label: 'data per day',
+              label: '每天用量',
               data: v,
               borderWidth: 1
           }]
@@ -30,7 +29,7 @@
 
 {% block content %}
   <div class="heading">
-    <h2>Order ID : <span style="color:red">{{order.id}}</span></h2>
+    <h2>服务ID : <span style="color:red">{{order.id}}</span></h2>
   </div>
   <div class="section">
     <canvas id="traffic_chart" width="900" height="400"></canvas>

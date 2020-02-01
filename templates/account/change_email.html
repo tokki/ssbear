@@ -1,12 +1,11 @@
 {% extends "account/layout.html" %}
-{% load i18n %}
 
-{% block title %}{{settings.SITE_NAME}} › {% trans "Change email" %} {% endblock %}
+{% block title %}{{settings.SITE_NAME}} › 修改邮箱 {% endblock %}
 
 {% block content %}
 <div class="section">
   <div class="section-title">
-    <b>{{settings.SITE_NAME}}</b> ›  {% trans "Change email" %} 
+    <b>{{settings.SITE_NAME}}</b> › 修改邮箱
   </div>
   <div class="section-content">
     <h4>{{request.user.email}}</h4>
@@ -20,7 +19,7 @@
           </div>
         {% endfor %}
         <div class="form-group">
-          <button type="submit" class="btn primary"> {% trans "Submit" %}  </button>
+          <button type="submit" class="btn primary">提交</button>
         </div>
     </form>
   </div>
