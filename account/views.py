@@ -144,7 +144,7 @@ def register_view(request):
                         password=password,
                     )
                     newuser.inviter_id = inv.user_id
-                    if inv.text == 'bwave':
+                    if inv.text == '70kk1666':
                         newuser.balance = 120.00
                     newuser.save()
                     inv.times = inv.times - 1

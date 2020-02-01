@@ -12,9 +12,7 @@ import uuid
 # Create your models here.
 class Announcement(models.Model):
     title = models.CharField(max_length=40)
-    title_cn = models.CharField(max_length=40)
     content = models.TextField()
-    content_cn = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
     is_public = models.BooleanField(default=False)
 
@@ -31,9 +29,7 @@ class Node(models.Model):
         (1, 'V2ray'),
     ]
     name = models.CharField(max_length=40)
-    name_cn = models.CharField(max_length=40)
     description = models.CharField(max_length=40)
-    description_cn = models.CharField(max_length=40)
     host = models.CharField(max_length=40)
     mode = models.IntegerField(default=0, choices=MODE)
     create_at = models.DateTimeField(auto_now_add=True)
@@ -54,7 +50,6 @@ class Bill(models.Model):
     )
     user_id = models.IntegerField(default=0)
     info = models.CharField(max_length=40)
-    info_cn = models.CharField(max_length=40)
     # status for bill true == add false == use
     status = models.BooleanField()
     payment = models.IntegerField(default=0, choices=PAYMENT)
@@ -80,9 +75,7 @@ class Bill(models.Model):
 
 class Service(models.Model):
     title = models.CharField(max_length=40)
-    title_cn = models.CharField(max_length=40)
     description = models.CharField(max_length=300)
-    description_cn = models.CharField(max_length=300)
     data_per_month = models.IntegerField(default=0)
     days = models.IntegerField(default=0)
     price = models.DecimalField(
