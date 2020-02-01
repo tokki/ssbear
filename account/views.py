@@ -49,8 +49,8 @@ def login_view(request):
                 password=password,
             )
             if user:
-                login(request, user)
                 messages.success(request, _('Login Success'))
+                login(request, user)
                 return redirect('/dashboard/')
             else:
                 form.add_error('username', _('account or password error'))

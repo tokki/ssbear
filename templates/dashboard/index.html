@@ -57,27 +57,11 @@
       <a  class="btn small primary" href="/dashboard/add_invite/" >{% trans "Create new invite code"%}</a>
     </div>
     <h3>{% trans "Invite code" %}</h3>
-    <table class="table">
-      <thead>
-        <th>{% trans "text" %}</th>
-        <th>{% trans "times left" %}</th>
-        <th>{% trans "expired" %}</th>
-      </thead>
-      <tbody>
-        {% for inv in invs %}
-        <tr>
-          <td>{{inv.text}}</td>
-          <td>{{inv.times}}</td>
-          <td>{{inv.expired|date:"Y-m-d"}}</td>
-        </tr>
-        {% endfor%}
-      </tbody>
-    </table>
- 
+    <p>邀请码:{{inv.text}} | 剩余{{inv.times}}次 | 过期时间为{{inv.expired|date:"Y-d-m"}}</p>
   </div>
-
   <div class="section">
-    <h3>{% trans "Invite History" %}</h3>
+
+    <h4>{% trans "Invite History" %}</h4>
     <table class="table">
       <thead>
         <th>{% trans "Create date" %}</th>

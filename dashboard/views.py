@@ -161,9 +161,21 @@ def add_invite(request):
     if not settings.INVITE_CODE:
         return HttpResponse(_("invite is disabled"), 404)
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = InviteForm(request.POST)
         if form.is_valid():
+            times = form.cleaned_data['times']
+            text = form.cleaned_data['text']
+            days = form.cleaned_data['days']
+            inv = InviteCode.objects.filter(user_id=request.user.id).first()
+            if inv:
+                inv.text=text
+                inv.times=times
+                inv.days=days
+                inv.save()
+                messages.success(request, _('Invite code has been changed'))
+                return redirect('/dashboard/')
+
             text = form.cleaned_data['text']
             invite = InviteCode.objects.filter(text=text).first()
             if invite:
@@ -171,9 +183,9 @@ def add_invite(request):
                 return render(request, 'dashboard/add_invite.html', locals())
             else:
                 newinv = InviteCode(
-                    text=form.cleaned_data['text'],
-                    times=form.cleaned_data['times'],
-                    days=form.cleaned_data['days'],
+                    text=text,
+                    times=times,
+                    days=days,
                     user_id=request.user.id,
                 )
                 newinv.save()

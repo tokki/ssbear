@@ -159,7 +159,7 @@ class Order(models.Model):
             'net': 'ws',
             'type': 'none',
             'host': node.host,
-            'path': '/ws-test',
+            'path': '/ssbear',
             'tls': 'tls',
         }
         tpl = json.dumps(obj)
