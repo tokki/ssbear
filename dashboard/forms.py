@@ -48,3 +48,12 @@ class InviteForm(forms.Form):
             'invalid': '只可以是数字',
         },
     )
+
+class CodepayForm(forms.Form):
+    text = forms.SlugField(
+        label='字符',
+        error_messages={
+            'required': '不能为空',
+            'invalid': '字符只能包含a-z A-Z _ - ',
+        },
+    )

@@ -46,6 +46,7 @@ class Bill(models.Model):
     PAYMENT = (
         (0, 'alipay当面付'),
         (1, '邀请用户奖励'),
+        (2, '充值码充值'),
         (5, '购买服务'),
     )
     user_id = models.IntegerField(default=0)
@@ -167,3 +168,21 @@ class TrafficLog(models.Model):
 
     def __str__(self):
         return str(self.create_at)
+
+
+class Codepay(models.Model):
+    STATUS = [
+        (0, '已失效'),
+        (1, '正常'),
+    ]
+    text = models.CharField(max_length=20)
+    balance = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
+        default=0,
+    )
+    status = models.IntegerField(default=1, choices=STATUS)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text +'|'+ str(self.balance)

@@ -4,24 +4,45 @@
 
 {% block content %}
   <div class="heading">
-    {% if order.payment == 0 %}
-    <h2>支付宝扫码支付</h2>
-    {% else %}
-    <h2>屁股支付</h2>
-    {% endif %}
+    <h2>充值</h2>
   </div>
   <div class="section">
-    {% if order.payment == 0 %}
-      {{order.qrcode}}
-    {% else %}
-    <p> 请在支付时候备注订单号:<b class="price">{{order.id}}</b></p>
-    {% endif %}
+    <h2>账户余额:{{request.user.balance}}RMB</h2>
+    <h4>选择支付方式</h4>
+    <p><a class="btn primary" href="/dashboard/pay/alipay/">支付宝</a></p>
+    <p><a class="btn primary" href="/dashboard/pay/code/">充值码</a></p>
   </div>
   <div class="section">
-    <h4>支付信息</h4>
-    <p>{{order.service.title}}</p>
-    <p>{{order.service.description}}</p>
-    <p>价格:{{order.service.price}} 年付</p>
+    <h3>历史账单</h3>
+    <table class="table">
+      <thead>
+        <th>交易单号</th>
+        <th>日期</th>
+        <th>价格</th>
+        <th>信息</th>
+      </thead>
+      <tbody>
+        {% for bill in bills %}
+        <tr>
+          <td>{{bill.trade_no}}</td>
+          <td>{{bill.create_at|date:'Y-m-d'}}</td>
+          <td >
+            {% if not bill.status %}
+              <span style="color:red">-{{bill.price}}RMB</span>
+            {% else %}
+            <span style="color:green">+{{bill.price}}RMB</span>
+            {% endif %}
+          </td>
+          <td>
+            {{bill.info}}
+          </td>
+        </tr>
+        {% endfor%}
+      </tbody>
+    </table>
+    <div class="more">
+      <a class="btn small" href="/dashboard/bill/">查看全部账单</a>
+    </div>
   </div>
 
 

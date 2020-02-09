@@ -5,9 +5,9 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Service, Order, Announcement, Bill, Node
-from .models import TrafficLog
+from .models import TrafficLog,Codepay
 from account.models import InviteCode
-from .forms import OrderForm, InviteForm, ChangeSSForm
+from .forms import OrderForm, InviteForm, ChangeSSForm,CodepayForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib.auth.decorators import login_required
@@ -95,7 +95,6 @@ def confirm(request):
                 bill = Bill(
                     user_id=user.id,
                     info=service.title,
-                    info_cn=service.title_cn,
                     status=False,
                     payment=5,
                     price=service.price,
@@ -106,8 +105,7 @@ def confirm(request):
                 if user.inviter_id > 1:
                     bill2 = Bill(
                         user_id=user.inviter_id,
-                        info="aff by " + user.email,
-                        info_cn="通过邀请用户" + user.email + "获利",
+                        info="通过邀请用户" + user.email + "获利",
                         status=True,
                         payment=1,
                         price=service.price / 10,
@@ -129,13 +127,41 @@ def confirm(request):
 
 @login_required
 def pay(request):
-    oid = request.GET.get('oid', None)
-    order = Order.objects.filter(id=oid).first()
-    if order.user_id != request.user.id:
-        return redirect('/dashboard/')
-    else:
-        return render(request, 'dashboard/pay.html', locals())
+    bills = Bill.objects.filter(user_id=request.user.id)[0:3]
+    return render(request, 'dashboard/pay.html', locals())
 
+
+@login_required
+def codepay(request):
+    user = request.user
+    form = CodepayForm()
+    if request.method == 'POST':
+        form = CodepayForm(request.POST)
+        if form.is_valid():
+            text = form.cleaned_data['text']
+            code = Codepay.objects.filter(text=text).first()
+            print(code)
+            if not code or code.status==0:
+                form.add_error('text','充值码输入错误')
+                return render(request, 'dashboard/codepay.html', locals())
+            else:
+                with transaction.atomic():
+                    user.balance = user.balance + code.balance
+                    user.save()
+                    code.status = 0
+                    code.save()
+                    bill = Bill(
+                        user_id=user.id,
+                        info='通过充值码充值',
+                        status=True,
+                        payment=2,
+                        price=code.balance,
+                        trade_no='code_' + str(code.id),
+                    )
+                    bill.save()
+                messages.success(request,'充值成功')
+                return redirect('/dashboard/pay/')
+    return render(request, 'dashboard/codepay.html', locals())
 
 @login_required
 def my_service(request):
@@ -147,11 +173,6 @@ def my_service(request):
 def invite_history(request):
     users = User.objects.filter(inviter_id=request.user.id).all()
     return render(request, 'dashboard/invite_history.html', locals())
-
-
-@login_required
-def add_credit(request):
-    return HttpResponse("not ready yet")
 
 
 @login_required
