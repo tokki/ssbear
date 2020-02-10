@@ -1,0 +1,27 @@
+{% extends "base/layout.html" %}
+
+{% block title %}{{settings.SITE_NAME}} › 支付宝网页充值 {% endblock %}
+
+{% block content %}
+<div class="heading">
+  <h2>支付宝网页充值</h2>
+</div>
+<div class="section">
+  <form class="form normal" action="/dashboard/pay/alipay_page/" method="post">
+      {% csrf_token %}
+      {% for field in form%}
+        <div class="form-group">
+          <label for="{{field.name}}">{{field.label}}</label>
+          {{field}}
+          {{field.errors}}
+        </div>
+      {% endfor %}
+      <div class="form-group">
+        <button type="submit" class="btn primary">提交 </button>
+      </div>
+  </form>
+</div>
+
+
+{% endblock %}
+

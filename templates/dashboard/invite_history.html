@@ -16,7 +16,7 @@
       <tbody>
         {% for user in users %}
         <tr>
-          <td>{{user.date_joined|date:'Y.m.d'}}</td>
+          <td>{{user.date_joined|date:'Y-m-d H:i:s' }}</td>
           <td>{{user.email}}</td>
         </tr>
         {% endfor%}

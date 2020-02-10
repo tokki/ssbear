@@ -44,13 +44,14 @@ class Node(models.Model):
 
 class Bill(models.Model):
     PAYMENT = (
-        (0, 'alipay当面付'),
+        (0, '支付宝'),
         (1, '邀请用户奖励'),
         (2, '充值码充值'),
         (5, '购买服务'),
     )
     user_id = models.IntegerField(default=0)
     info = models.CharField(max_length=40)
+    trade_no = models.CharField(max_length=100)
     # status for bill true == add false == use
     status = models.BooleanField()
     payment = models.IntegerField(default=0, choices=PAYMENT)
@@ -60,18 +61,12 @@ class Bill(models.Model):
         default=0,
     )
     create_at = models.DateTimeField(auto_now_add=True)
-    trade_no = models.CharField(max_length=100)
 
     class Meta:
         ordering = ("-create_at", )
 
     def __str__(self):
-        return self.trade_no
-
-    @classmethod
-    def gen_trade_no(cls):
-        return datetime.datetime.fromtimestamp(
-            time.time()).strftime("%Y%m%d%H%M%S%s")
+        return self.info
 
 
 class Service(models.Model):
@@ -186,3 +181,30 @@ class Codepay(models.Model):
 
     def __str__(self):
         return self.text +'|'+ str(self.balance)
+
+
+class AlipayOrder(models.Model):
+    STATUS = (
+        (0, '未支付'),
+        (1, '支付成功'),
+    )
+    user_id = models.IntegerField(default=0)
+    info = models.CharField(max_length=40)
+    status = models.IntegerField(default=0, choices=STATUS)
+    amount = models.DecimalField(
+        decimal_places=2,
+        max_digits=10,
+        default=0,
+    )
+    create_at = models.DateTimeField(auto_now_add=True)
+    trade_no = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ("-create_at", )
+
+    def __str__(self):
+        return self.info
+
+    @property
+    def out_trade_no(self):
+        return 'ssbear_'+str(self.id)

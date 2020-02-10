@@ -7,4 +7,5 @@ urlpatterns = [
     path('traffic/', views.traffic),
     path('sync_ss/', views.sync_ss),
     path('traffic_ss/', views.traffic_ss),
+    path('alipay/', views.alipay_callback),
 ]

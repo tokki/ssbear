@@ -60,7 +60,7 @@ def login_view(request):
 
 def send_code_view(request):
     if not settings.MAILGUN:
-        return HttpResponse('reset code function disable',403)
+        return HttpResponse('reset code function disabled',403)
 
     if request.method == 'POST':
         form = SendCodeForm(request.POST)

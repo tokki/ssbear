@@ -19,7 +19,7 @@
         {% for bill in bills %}
         <tr>
           <td>{{bill.trade_no}}</td>
-          <td>{{bill.create_at|date:'Y-m-d'}}</td>
+          <td>{{bill.create_at|date:'Y-m-d H:i:s'}}</td>
           <td >
             {% if not bill.status %}
               <span style="color:red">-{{bill.price}}RMB</span>

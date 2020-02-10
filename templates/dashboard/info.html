@@ -10,7 +10,7 @@
   </div>
   <div class="section">
     <div class="more-right">
-      <a  class="btn small" href="/dashboard/add_credit/" >充值</a>
+      <a  class="btn small primary" href="/dashboard/pay/" >充值</a>
     </div>
     <h3>余额</h3>
     <p>{{user.balance}}RMB</p>
@@ -49,7 +49,7 @@
         {% for bill in bills %}
         <tr>
           <td>{{bill.trade_no}}</td>
-          <td>{{bill.create_at|date:'Y-m-d'}}</td>
+          <td>{{bill.create_at|date:'Y-m-d H:i:s'}}</td>
           <td >
             {% if not bill.status %}
               <span style="color:red">-{{bill.price}}RMB</span>

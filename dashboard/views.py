@@ -5,9 +5,10 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Service, Order, Announcement, Bill, Node
-from .models import TrafficLog,Codepay
+from .models import TrafficLog,Codepay,AlipayOrder
 from account.models import InviteCode
 from .forms import OrderForm, InviteForm, ChangeSSForm,CodepayForm
+from .forms import AlipayForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib.auth.decorators import login_required
@@ -17,6 +18,7 @@ import django.utils.timezone as timezone
 from django.db import transaction
 from dateutil.relativedelta import relativedelta
 import json
+from ssbear.alipay import alipay
 
 
 # Create your views here.
@@ -94,7 +96,7 @@ def confirm(request):
 
                 bill = Bill(
                     user_id=user.id,
-                    info=service.title,
+                    info="购买套餐"+service.title,
                     status=False,
                     payment=5,
                     price=service.price,
@@ -132,6 +134,38 @@ def pay(request):
 
 
 @login_required
+def alipay_page(request):
+    if not settings.ALIPAY:
+        return HttpResponse('disabled', 403)
+
+    form = AlipayForm()
+    if request.method == 'POST':
+        form = AlipayForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data.get('amount')
+            ali_order = AlipayOrder(
+                user_id = request.user.id,
+                info = "充值",
+                amount = amount,
+                trade_no = "",
+            )
+            ali_order.save()
+
+            pay = alipay()
+            subject = settings.SITE_NAME+"支付订单"
+
+            order_string = pay.api_alipay_trade_page_pay(
+                out_trade_no=ali_order.out_trade_no,
+                total_amount=amount,
+                subject=subject,
+                return_url=settings.SITE_URL+"/dashboard/pay/",
+            )
+            getway = "https://openapi.alipay.com/gateway.do?"+order_string
+            return redirect(getway)
+    return render(request, 'dashboard/alipay_page.html', locals())
+
+
+@login_required
 def codepay(request):
     user = request.user
     form = CodepayForm()
@@ -140,7 +174,6 @@ def codepay(request):
         if form.is_valid():
             text = form.cleaned_data['text']
             code = Codepay.objects.filter(text=text).first()
-            print(code)
             if not code or code.status==0:
                 form.add_error('text','充值码输入错误')
                 return render(request, 'dashboard/codepay.html', locals())
@@ -178,7 +211,7 @@ def invite_history(request):
 @login_required
 def add_invite(request):
     if not settings.INVITE_CODE:
-        return HttpResponse("邀请功能暂时禁用", 403)
+        return HttpResponse('disabled', 403)
 
     if request.method == 'POST':
         form = InviteForm(request.POST)

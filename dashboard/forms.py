@@ -49,11 +49,22 @@ class InviteForm(forms.Form):
         },
     )
 
+
 class CodepayForm(forms.Form):
     text = forms.SlugField(
         label='字符',
         error_messages={
             'required': '不能为空',
             'invalid': '字符只能包含a-z A-Z _ - ',
+        },
+    )
+
+
+class AlipayForm(forms.Form):
+    amount = forms.IntegerField(
+        label='金额/元',
+        error_messages={
+            'required': '不能为空',
+            'invalid': '只能是整数',
         },
     )

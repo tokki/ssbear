@@ -1,11 +1,49 @@
 from django.views.decorators.csrf import csrf_exempt
 from ssbear.util import api_auth
-from dashboard.models import Order, TrafficLog
+from django.contrib.auth import get_user_model
+User = get_user_model()
+from dashboard.models import Order, TrafficLog,Bill,AlipayOrder
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.db import transaction
+from ssbear.alipay import alipay
 import json
 
+
+@csrf_exempt
+@transaction.atomic
+def alipay_callback(request):
+    if request.method == 'POST':
+        data = request.POST.dict()
+        signature = data['sign']
+        pay = alipay()
+        try:
+            success = pay.verify(data, signature)
+        except:
+            success = False
+        if success and data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED" ):
+            oid = int(data['out_trade_no'].replace('ssbear_',''))
+            order = AlipayOrder.objects.filter(id=oid).first()
+            if order and order.status == 0:
+                order.status = 1
+                trade_no = data['trade_no']
+                order.save()
+
+                user = User.objects.filter(id=order.user_id).first()
+                user.balance = user.balance + order.amount
+                user.save()
+
+                bill = Bill(
+                    user_id = order.user_id,
+                    info = '支付宝充值',
+                    status = True,
+                    payment = 0,
+                    price = order.amount,
+                    trade_no ='alipay_'+str(order.id),
+                )
+                bill.save()
+            return HttpResponse('ok')
+        
 
 @api_auth
 @csrf_exempt
@@ -16,7 +54,6 @@ def sync(request):
 
 
 @api_auth
-@csrf_exempt
 @csrf_exempt
 def sync_ss(request):
     order_list = Order.objects.filter(status=1)

@@ -10,6 +10,7 @@ urlpatterns = [
     path('confirm/', views.confirm),
     path('pay/', views.pay),
     path('pay/code/', views.codepay),
+    path('pay/alipay_page/', views.alipay_page),
     path('my_service/', views.my_service),
     path('info/', views.info),
     path('invite_history/', views.invite_history),

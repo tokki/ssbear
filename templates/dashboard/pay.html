@@ -9,7 +9,7 @@
   <div class="section">
     <h2>账户余额:{{request.user.balance}}RMB</h2>
     <h4>选择支付方式</h4>
-    <p><a class="btn primary" href="/dashboard/pay/alipay/">支付宝</a></p>
+    <p><a class="btn primary" href="/dashboard/pay/alipay_page/">支付宝</a></p>
     <p><a class="btn primary" href="/dashboard/pay/code/">充值码</a></p>
   </div>
   <div class="section">
@@ -25,7 +25,7 @@
         {% for bill in bills %}
         <tr>
           <td>{{bill.trade_no}}</td>
-          <td>{{bill.create_at|date:'Y-m-d'}}</td>
+          <td>{{bill.create_at|date:'Y-m-d H:i:s'}}</td>
           <td >
             {% if not bill.status %}
               <span style="color:red">-{{bill.price}}RMB</span>
