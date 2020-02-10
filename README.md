@@ -1,6 +1,20 @@
 # ssbear
 
-python -m smtpd -n -c DebuggingServer localhost:1025
+
+
+```
++----------+            +-------------+        +--------------+
+|          |            |             |        |              |
+|  ssbear  +------------+   syncbear  +--------+  shadowsocks |
+|          |            |             |        |              |
++-----+----+            +-------------+        +--------------+
+      |
+      |                 +-------------+        +--------------+
+      |                 |             |        |              |
+      +-----------------+   syncbear  +--------+    v2ray     |
+                        |             |        |              |
+                        +-------------+        +--------------+
+```
 
 
 
@@ -16,6 +30,8 @@ pip install django-crontab
 
 pip install psycopg2
 
+pip install python-alipay-sdk
+
 #### how to use crontab
 
 python manage.py crontab add
@@ -30,7 +46,7 @@ python manage.py crontab remove
 
 - [ ] Save traffic to redis and show it in graphic 
 - [x] useful front page
-- [ ] add alipay
+- [x] add alipay
 - [x] restructure v2ray sidecar
 - [x] add support to ss
 - [ ] add support to trojan
@@ -38,3 +54,16 @@ python manage.py crontab remove
 - [x] make interface simple , no need to support mobile
 - [x] recode invite code
 - [x] remove i18n
+
+
+
+# debug email
+
+python -m smtpd -n -c DebuggingServer localhost:1025
+
+
+
+## links
+
+https://github.com/fzlee/alipay
+
