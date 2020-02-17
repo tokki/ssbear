@@ -136,7 +136,7 @@ def pay(request):
 @login_required
 def alipay_page(request):
     if not settings.ALIPAY:
-        return HttpResponse('disabled', 403)
+        return HttpResponse('disabled', status=403)
 
     form = AlipayForm()
     if request.method == 'POST':
@@ -211,7 +211,7 @@ def invite_history(request):
 @login_required
 def add_invite(request):
     if not settings.INVITE_CODE:
-        return HttpResponse('disabled', 403)
+        return HttpResponse('disabled', status=403)
 
     if request.method == 'POST':
         form = InviteForm(request.POST)
