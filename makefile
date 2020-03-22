@@ -1,3 +1,5 @@
+.PHONY : css account
+
 css: 
 	stylus -w static/css/app.styl -u nib
 

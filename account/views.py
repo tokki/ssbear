@@ -11,33 +11,20 @@ from .forms import ResetPasswordForm, EmailForm
 from .forms import ChangePasswordForm
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from ssbear.mail import send_code
 from django.utils import timezone
 from datetime import timedelta
 from ssbear.util import render
+from django.views import View
 
 
-def index(request):
-    return render(request, 'index.html', locals())
+class Login(View):
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'account/login.html', locals())
 
-
-def set_language(request):
-    lang = request.GET.get('lang', None)
-    path = request.GET.get('next', None)
-    if path:
-        response = redirect(path)
-    else:
-        response = redirect('/')
-    if lang == 'zh-hans':
-        response.set_cookie('django_language', 'zh-hans')
-    else:
-        response.set_cookie('django_language', 'en-us')
-    return response
-
-
-def login_view(request):
-    if request.method == 'POST':
+    def post(self, request):
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -53,38 +40,41 @@ def login_view(request):
                 return redirect('/dashboard/')
             else:
                 form.add_error('username', '用户名或密码错误')
-    else:
-        form = LoginForm()
-    return render(request, 'account/login.html', locals())
+        return render(request, 'account/login.html', locals())
 
 
-def send_code_view(request):
-    if not settings.MAILGUN:
-        return HttpResponse('reset code function disabled',status=403)
-
-    if request.method == 'POST':
-        form = SendCodeForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            user = User.objects.filter(email=email).first()
-            if user:
-                res = ResetCode.objects.filter(email=email).first()
-                if res:
-                    timezone.now() < res.create_at + timedelta(minutes=60)
-                    form.add_error('email', '过一会再试试')
-                else:
-                    send_code(user)
-                    messages.success(request, '发送成功，注意查看邮箱')
-                    return redirect('/account/reset_password/?q=' + email)
-            else:
-                form.add_error('email', '过一会再试试')
-    else:
+class SendCode(View):
+    def get(self, request):
         form = SendCodeForm()
-    return render(request, 'account/send_code.html', locals())
+        return render(request, 'account/send_code.html', locals())
+
+    def post(self, request):
+        if request.method == 'POST':
+            form = SendCodeForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data['email']
+                user = User.objects.filter(email=email).first()
+                if user:
+                    res = ResetCode.objects.filter(email=email).first()
+                    if res:
+                        timezone.now() < res.create_at + timedelta(minutes=60)
+                        form.add_error('email', '过一会再试试')
+                    else:
+                        send_code(user)
+                        messages.success(request, '发送成功，注意查看邮箱')
+                        return redirect('/account/reset_password/?q=' + email)
+                else:
+                    form.add_error('email', '过一会再试试')
+        return render(request, 'account/send_code.html', locals())
 
 
-def reset_password_view(request):
-    if request.POST:
+class ResetPassword(View):
+    def get(self, request):
+        email = request.GET.get('q')
+        form = ResetPasswordForm(initial={'email': email})
+        return render(request, 'account/reset_password.html', locals())
+
+    def post(self, request):
         form = ResetPasswordForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
@@ -104,19 +94,21 @@ def reset_password_view(request):
                     return redirect('/account/login/')
                 else:
                     form.add_error('code', '验证码错误')
-    else:
-        email = request.GET.get('q')
-        form = ResetPasswordForm(initial={'email': email})
-    return render(request, 'account/reset_password.html', locals())
+            return render(request, 'account/reset_password.html', locals())
 
 
-def logout_view(request):
-    logout(request)
-    return redirect('/account/login/')
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        return redirect('/account/login/')
 
 
-def register_view(request):
-    if request.method == 'POST':
+class Register(View):
+    def get(self, request):
+        form = RegisterForm()
+        return render(request, 'account/register.html', locals())
+
+    def post(self, request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             invite = form.cleaned_data['invite']
@@ -144,22 +136,21 @@ def register_view(request):
                         password=password,
                     )
                     newuser.inviter_id = inv.user_id
-                    if inv.text == '70kk1666':
-                        newuser.balance = 120.00
                     newuser.save()
                     inv.times = inv.times - 1
                     inv.save()
                     messages.success(request, '登录成功')
                     login(request, newuser)
                     return redirect('/dashboard/')
-    else:
-        form = RegisterForm()
-    return render(request, 'account/register.html', locals())
+        return render(request, 'account/register.html', locals())
 
 
-@login_required
-def change_password_view(request):
-    if request.method == 'POST':
+class ChangePassword(LoginRequiredMixin, View):
+    def get(self, request):
+        form = ChangePasswordForm()
+        return render(request, 'account/change_password.html', locals())
+
+    def post(self, request):
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
             old = form.cleaned_data['old']
@@ -181,15 +172,16 @@ def change_password_view(request):
                     return redirect('/dashboard/')
             else:
                 form.add_error('old', '旧密码错误')
-    else:
-        form = ChangePasswordForm()
 
-    return render(request, 'account/change_password.html', locals())
+        return render(request, 'account/change_password.html', locals())
 
 
-@login_required
-def change_email_view(request):
-    if request.method == 'POST':
+class ChangeEmail(LoginRequiredMixin, View):
+    def get(self, request):
+        form = EmailForm()
+        return render(request, 'account/change_email.html', locals())
+
+    def post(self, request):
         form = EmailForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
@@ -197,6 +189,11 @@ def change_email_view(request):
             u.email = email
             u.save()
             messages.success(request, '邮箱修改成功')
-    else:
-        form = EmailForm()
-    return render(request, 'account/change_email.html', locals())
+            return redirect('/dashboard/')
+        return render(request, 'account/change_email.html', locals())
+
+
+class Setting(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user
+        return render(request, 'app/setting.html', locals())
