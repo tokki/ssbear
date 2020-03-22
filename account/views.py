@@ -18,6 +18,9 @@ from datetime import timedelta
 from ssbear.util import render
 from django.views import View
 
+class Home(View):
+    def get(self, request):
+        return render(request, 'index.html', locals())
 
 class Login(View):
     def get(self, request):
@@ -192,8 +195,3 @@ class ChangeEmail(LoginRequiredMixin, View):
             return redirect('/dashboard/')
         return render(request, 'account/change_email.html', locals())
 
-
-class Setting(LoginRequiredMixin, View):
-    def get(self, request):
-        user = request.user
-        return render(request, 'app/setting.html', locals())

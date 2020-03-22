@@ -42,7 +42,7 @@ def alipay_callback(request):
                     trade_no ='alipay_'+str(order.id),
                 )
                 bill.save()
-            return HttpResponse('ok')
+            return HttpResponse(status=204)
         
 
 @api_auth
@@ -82,7 +82,6 @@ def traffic_ss(request):
                     # disable empty data orders
                     order.status = 0
             Order.objects.bulk_update(orders, [
-                'traffic_up',
                 'traffic_down',
                 'status',
             ])
@@ -131,5 +130,5 @@ def traffic(request):
                     tlog.append(newlog)
             if len(tlog) > 0:
                 TrafficLog.objects.bulk_create(tlog)
-        return HttpResponse("ok")
+        return HttpResponse(status=204)
 

@@ -146,7 +146,7 @@ MAILGUN = True
 
 CRONJOBS = [
     ('01 02 * * *', 'ssbear.cron.reset_data'),
-    ('05 02 * * *', 'ssbear.cron.clean_traffic_log')
+    ('02 02 * * *', 'ssbear.cron.clean_traffic_log'),
 ]
 
 ANYMAIL = {

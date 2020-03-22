@@ -18,7 +18,7 @@ def send_code(user):
         res.delete()
     rc = ResetCode(email=user.email,code=code)
     rc.save()
-    #send_mail( "重置密码--ssbear.com", msg, "ssbear <noreply@ssbear.com>", [user.email],)
-    print(code+msg)
+    send_mail( "重置密码--ssbear.com", msg, "ssbear <noreply@ssbear.com>", [user.email],)
+    #print(code+msg)
 
     
